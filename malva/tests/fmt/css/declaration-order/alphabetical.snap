@@ -29,8 +29,8 @@ a {
 }
 
 a {
-  animation: 0;
   animation-timeline: none;
+  animation: 0;
 }
 
 a {
