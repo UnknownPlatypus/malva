@@ -96,3 +96,28 @@ a {
   background-clip: 0;
   background-color: 0;
 }
+
+a {
+  margin-top: 5px;
+  margin: 0;
+}
+
+a {
+  top: 5px;
+  inset: 0;
+}
+
+a {
+  -webkit-animation-name: x;
+  animation: y;
+}
+
+a {
+  margin-top: 5px;
+  margin: 0;
+}
+
+a {
+  color: red;
+  all: unset;
+}
