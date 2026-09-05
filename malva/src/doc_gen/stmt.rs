@@ -398,6 +398,7 @@ impl<'a, 's: 'a> DocGen<'a, 's> for Stylesheet<'s> {
         let mut stmt_docs = vec![];
         if ctx.syntax == Syntax::Css
             && ctx.options.single_line_top_level_declarations
+            && !self.statements.is_empty()
             && self
                 .statements
                 .iter()
@@ -407,12 +408,25 @@ impl<'a, 's: 'a> DocGen<'a, 's> for Stylesheet<'s> {
             // but parser allows them and treat them as recoverable errors.
             // This situation can happen when formatting declarations
             // inside `style` attribute in HTML.
-            // All comments are ignored.
-            stmt_docs = itertools::intersperse(
-                self.statements.iter().map(|stmt| stmt.doc(ctx, state)),
-                Doc::text("; "),
-            )
-            .collect();
+            // Comments are kept, space-separated, so that everything still fits on one line.
+            let mut pos = self.span.start;
+            let mut stmts = self.statements.iter().peekable();
+            while let Some(stmt) = stmts.next() {
+                let span = stmt.span();
+                stmt_docs.extend(
+                    ctx.get_comments_between(pos, span.start)
+                        .flat_map(|comment| [format_comment(comment, ctx), Doc::space()]),
+                );
+                stmt_docs.push(stmt.doc(ctx, state));
+                pos = span.end;
+                if stmts.peek().is_some() {
+                    stmt_docs.push(Doc::text("; "));
+                }
+            }
+            stmt_docs.extend(
+                ctx.get_comments_between(pos, self.span.end)
+                    .flat_map(|comment| [Doc::space(), format_comment(comment, ctx)]),
+            );
         } else {
             format_statements(
                 &mut stmt_docs,

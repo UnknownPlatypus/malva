@@ -1,4 +1,4 @@
 ---
 source: malva/tests/fmt.rs
 ---
-width: 1px; height: 1px
+/*cfg "singleLineTopLevelDeclarations" = true */ width: 1px; height: 1px

@@ -1,0 +1,4 @@
+---
+source: malva/tests/fmt.rs
+---
+/*cfg "singleLineTopLevelDeclarations" = true */ /* a */ color: red; /* b */ margin: 0 /* c */
