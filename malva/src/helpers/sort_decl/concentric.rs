@@ -1,8 +1,7 @@
-use super::compare_by_list_index;
-use std::cmp::Ordering;
+use super::rank_in_list;
 
-pub fn compare_in_concentric(a: &str, b: &str) -> Ordering {
-    compare_by_list_index(a, b, PROPERTIES)
+pub fn rank_in_concentric(name: &str) -> Option<usize> {
+    rank_in_list(name, &PROPERTIES)
 }
 
 // https://github.com/Siilwyn/css-declaration-sorter/blob/master/src/orders/concentric-css.mjs

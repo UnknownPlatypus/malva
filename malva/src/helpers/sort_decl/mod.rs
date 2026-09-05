@@ -1,16 +1,41 @@
-pub use concentric::compare_in_concentric;
-pub use smacss::compare_in_smacss;
-use std::{cmp::Ordering, ops::ControlFlow};
+use crate::config::DeclarationOrder;
 
 mod concentric;
 mod smacss;
 
-pub fn compare_in_alphabetical(a: &str, b: &str) -> Ordering {
-    if a.starts_with("--") || b.starts_with("--") {
-        Ordering::Equal
-    } else {
-        strip_vendor_prefix(a).cmp(strip_vendor_prefix(b))
+pub fn sort<T>(decls: &mut [(&str, T)], order: &DeclarationOrder) {
+    match order {
+        DeclarationOrder::Alphabetical => insertion_sort(decls, alphabetical_key),
+        DeclarationOrder::Smacss => insertion_sort(decls, smacss::rank_in_smacss),
+        DeclarationOrder::Concentric => insertion_sort(decls, concentric::rank_in_concentric),
     }
+}
+
+/// Declarations only swap after a direct comparison. Unkeyed ones thus act as a barrier.
+fn insertion_sort<'s, T, K: Ord>(decls: &mut [(&'s str, T)], key: impl Fn(&'s str) -> Option<K>) {
+    let mut keys: Vec<_> = decls.iter().map(|(name, _)| key(name)).collect();
+    for i in 1..decls.len() {
+        let mut j = i;
+        while j > 0 && out_of_order(&keys[j - 1], &keys[j]) {
+            decls.swap(j - 1, j);
+            keys.swap(j - 1, j);
+            j -= 1;
+        }
+    }
+}
+
+fn out_of_order<K: Ord>(prev: &Option<K>, next: &Option<K>) -> bool {
+    matches!((prev, next), (Some(prev), Some(next)) if prev > next)
+}
+
+fn alphabetical_key(name: &str) -> Option<&str> {
+    (!name.starts_with("--")).then(|| strip_vendor_prefix(name))
+}
+
+fn rank_in_list(name: &str, list: &[&str]) -> Option<usize> {
+    let name = strip_vendor_prefix(name);
+    list.iter()
+        .position(|property| property.eq_ignore_ascii_case(name))
 }
 
 fn strip_vendor_prefix(s: &str) -> &str {
@@ -21,33 +46,4 @@ fn strip_vendor_prefix(s: &str) -> &str {
         })
         .and_then(|s| s.strip_prefix('-'))
         .unwrap_or(s)
-}
-
-fn compare_by_list_index<const N: usize>(a: &str, b: &str, list: [&'static str; N]) -> Ordering {
-    let a = strip_vendor_prefix(a);
-    let b = strip_vendor_prefix(b);
-
-    let result = list
-        .iter()
-        .enumerate()
-        .try_fold((None, None), |mut result, (index, property)| {
-            if result.0.is_none() && property.eq_ignore_ascii_case(a) {
-                result.0 = Some(index)
-            }
-            if result.1.is_none() && property.eq_ignore_ascii_case(b) {
-                result.1 = Some(index)
-            }
-            if result.0.is_some() && result.1.is_some() {
-                ControlFlow::Break(result)
-            } else {
-                ControlFlow::Continue(result)
-            }
-        });
-    if let ControlFlow::Break((Some(a), Some(b))) | ControlFlow::Continue((Some(a), Some(b))) =
-        result
-    {
-        a.cmp(&b)
-    } else {
-        Ordering::Equal
-    }
 }
