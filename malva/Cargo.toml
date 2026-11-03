@@ -12,7 +12,7 @@ exclude = ["/tests"]
 aho-corasick = "1.1"
 itertools = "0.15"
 memchr = "2.8"
-raffia = "0.13"
+raffia = { git = "https://github.com/g-plane/raffia", rev = "950567cf160700fa8cbfade1d9a29a83c1e3e319" }
 serde = { version = "1.0", optional = true }
 tiny_pretty = "0.4"
 

@@ -342,8 +342,7 @@ checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
 [[package]]
 name = "raffia"
 version = "0.13.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a83eb5987650fcfc3f2e912d3a718f19b8e87c0d980e12e36edf79fa0221d93"
+source = "git+https://github.com/g-plane/raffia?rev=950567cf160700fa8cbfade1d9a29a83c1e3e319#950567cf160700fa8cbfade1d9a29a83c1e3e319"
 dependencies = [
  "raffia_macro",
  "serde",
@@ -353,8 +352,7 @@ dependencies = [
 [[package]]
 name = "raffia_macro"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ac21f5e4bc6b29ea5d5e691a9aa08b2b9fd8891f48a99157b9f02d8a48e1318"
+source = "git+https://github.com/g-plane/raffia?rev=950567cf160700fa8cbfade1d9a29a83c1e3e319#950567cf160700fa8cbfade1d9a29a83c1e3e319"
 dependencies = [
  "heck",
  "quote",
