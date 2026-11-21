@@ -1,2 +1,4 @@
 @container my-container scroll-state( scrollable:top ) {}
 @container scroll-state( scrollable:top ) {}
+@container anchored( fallback:flip-block --custom ) {}
+@container (anchored(fallback: top)) {}

@@ -163,6 +163,22 @@ impl<'a, 's: 'a> DocGen<'a, 's> for QueryInParens<'s> {
                     )
                     .append(Doc::char(')'))
             }
+            QueryInParensKind::Anchored(anchored) => {
+                let span = anchored.span();
+                Doc::text("anchored(")
+                    .concat(
+                        ctx.end_spaced_comments(
+                            ctx.get_comments_between(self.span.start, span.start),
+                        ),
+                    )
+                    .append(anchored.doc(ctx, state))
+                    .concat(
+                        ctx.start_spaced_comments(
+                            ctx.get_comments_between(span.end, self.span.end),
+                        ),
+                    )
+                    .append(Doc::char(')'))
+            }
         }
     }
 }

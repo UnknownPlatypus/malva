@@ -342,7 +342,7 @@ checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
 [[package]]
 name = "raffia"
 version = "0.13.0"
-source = "git+https://github.com/g-plane/raffia?rev=950567cf160700fa8cbfade1d9a29a83c1e3e319#950567cf160700fa8cbfade1d9a29a83c1e3e319"
+source = "git+https://github.com/g-plane/raffia?rev=23e1e0143108360f2510d743ed5f333f601c4ffd#23e1e0143108360f2510d743ed5f333f601c4ffd"
 dependencies = [
  "raffia_macro",
  "serde",
@@ -352,7 +352,7 @@ dependencies = [
 [[package]]
 name = "raffia_macro"
 version = "0.2.0"
-source = "git+https://github.com/g-plane/raffia?rev=950567cf160700fa8cbfade1d9a29a83c1e3e319#950567cf160700fa8cbfade1d9a29a83c1e3e319"
+source = "git+https://github.com/g-plane/raffia?rev=23e1e0143108360f2510d743ed5f333f601c4ffd#23e1e0143108360f2510d743ed5f333f601c4ffd"
 dependencies = [
  "heck",
  "quote",
